@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Server-sent</title>
+
+</head>
+
+<body>
+
+  <ul id="list"></ul>
+
+  <script type="text/javascript">
+
+    const eventList = document.getElementById("list");
+
+    const evtSource = new EventSource('/weather');
+
+    evtSource.onopen = () => console.log("Connection to server opened.");
+
+    evtSource.onerror = () => console.log("EventSource failed.");
+
+    evtSource.addEventListener("onRecord", (event) => {
+
+      const newElement = document.createElement("li");
+
+      const data = JSON.parse(event.data);
+
+      newElement.textContent = `Weather: ${data.temperature} °F, ${data.humidity}%`;
+
+      eventList.appendChild(newElement);
+
+    });
+
+  </script>
+
+</body>
+
+</html>
